@@ -9,21 +9,26 @@ import Course_002 from '../components/course/components/Course_002.vue';
 import Course_003 from '../components/course/components/Course_003.vue';
 Vue.use(VueRouter);
 
-export default new VueRouter({
+import store from '../store';
+const router = new VueRouter({
   routes: [{
     path: '/',
     redirect: '/login'
   }, {
     path: '/login',
+    name: 'login',
     component: Login
   }, {
     path: '/home',
+    name: 'home',
     component: Home
   }, {
     path: '/recharge',
+    name: 'recharge',
     component: Recharge
   }, {
     path: '/course',
+    name: 'course',
     component: Course,
     children: [{
       path: '001',
@@ -36,4 +41,15 @@ export default new VueRouter({
       component: Course_003
     }]
   }]
+});
+router.beforeEach((to, from, next) => {
+  if ((store.state.name && store.state.password) || to.path === '/login') {
+    next();
+  } else {
+    next({
+      path: '/login'
+    })
+  }
 })
+
+export default router;

@@ -4,31 +4,31 @@
     <div class="accountInfo">
       <div class="account clearfix border-bottom">
         <div class="left">账号</div>
-        <div class="right">789</div>
+        <div class="right">{{ $store.state.name }}</div>
       </div>
       <div class="classes clearfix border-bottom">
         <div class="left">会员类别</div>
-        <div class="right">免费用户</div>
+        <div class="right">{{ $store.getters.accountClasses }}</div>
       </div>
     </div>
     <div class="recharge-wrapper">
       <div class="duration">开通时长：</div>
       <ul class="duration-content">
-        <combo class="year" howLong="连续包年" :price="269"></combo>
-        <combo class="quarter" howLong="连续包季" :price="68"></combo>
-        <combo class="month" howLong="连续包月" :price="25"></combo>
+        <combo :style="year.styleObj" @click.native="chosen('year')"  :show="year.show" howLong="连续包年" :price="269"></combo>
+        <combo :style="quarter.styleObj" @click.native="chosen('quarter')" :show="quarter.show" howLong="连续包季" :price="68"></combo>
+        <combo :style="month.styleObj" @click.native="chosen('month')" :show="month.show" howLong="连续包月" :price="25"></combo>
       </ul>
       <div class="way">支付方式：</div>
       <form class="pay-choice clearfix" action="">
         <div class="alipay">
-          <input type="radio" name="pay-way" id="alipay" value="alipay">
+          <input v-model="check" type="radio" name="pay-way" id="alipay" value="alipay">
           <span class="name">
             <span class="iconfont alipay-icon">&#xe600;</span>
             支付宝
           </span>
         </div>
         <div class="wechat">
-          <input type="radio" name="pay-way" id="wechat" value="wechat">
+          <input v-model="check" type="radio" name="pay-way" id="wechat" value="wechat">
           <span class="name">
             <span class="iconfont wechat-icon">&#xe630;</span>
             微信
@@ -38,20 +38,75 @@
       </form>
       <div class="pay">支付金额：</div>
       <div class="amount">
-        <span class="highlight">263</span>
+        <span class="highlight">{{ amount }}</span>
         元
       </div>
-      <input class="confirm-pay" type="button" value="确认支付">
+      <input @click="pay" class="confirm-pay" type="button" value="确认支付">
     </div>
   </div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 import Combo from '../common/Combo';
 export default {
   name: 'recharge',
   components: {
     Combo
+  },
+  data () {
+    return {
+      year: { name: 'year', show: false, styleObj: { border: '1px solid red' }, price: 263, remaining: 365 },
+      quarter: { name: 'quarter', show: false, styleObj: { border: '1px solid red' }, price: 68, remaining: 90 },
+      month: { name: 'month', show: false, styleObj: { border: '1px solid red' }, price: 25, remaining: 30 },
+      amount: '',
+      remaining: 0,
+      check: false
+    }
+  },
+  methods: {
+    chosen (duration) {
+      this.ifChosen(duration);
+    },
+    ifChosen (duration) {
+      let arr = [this.year, this.quarter, this.month];
+      let that = this;
+      arr.forEach(function(item) {
+        if (item.name === duration) {
+          item.show = true;
+          item.styleObj = {
+            border: '3px solid red'
+          };
+          that.amount = item.price;
+          that.remaining = item.remaining;
+        } else {
+          item.show = false;
+          item.styleObj = {
+            border: '1px solid red'
+          };
+        }
+      })
+    },
+    pay () {
+      if (this.check) {
+        setTimeout(() => {
+          alert('支付成功,您已是VIP会员');
+          let obj = {
+            classes: 'VIP',
+            remaining: this.remaining
+          }
+          this.setVIP_mutation(obj);
+          this.$router.push({
+            name: 'home'
+          });
+        }, 1000);
+      } else {
+        alert('请选择支付方式');
+      }
+
+      
+    },
+    ...mapMutations(['setVIP_mutation'])
   }
 }
 </script>
