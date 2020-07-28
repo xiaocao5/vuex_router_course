@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <h1 class="title">充值中心</h1>
+    <h1 class="title">充值中心3</h1>
     <div class="accountInfo">
       <div class="account clearfix border-bottom">
         <div class="left">账号</div>
@@ -14,9 +14,9 @@
     <div class="recharge-wrapper">
       <div class="duration">开通时长：</div>
       <ul class="duration-content">
-        <combo :style="year.styleObj" @click.native="chosen('year')"  :show="year.show" howLong="连续包年" :price="269"></combo>
-        <combo :style="quarter.styleObj" @click.native="chosen('quarter')" :show="quarter.show" howLong="连续包季" :price="68"></combo>
-        <combo :style="month.styleObj" @click.native="chosen('month')" :show="month.show" howLong="连续包月" :price="25"></combo>
+        <combo :style="year.styleObj" @click.native="chosen('year')"  :show="year.show" howLong="连续包年" :price="year.price"></combo>
+        <combo :style="quarter.styleObj" @click.native="chosen('quarter')" :show="quarter.show" howLong="连续包季" :price="quarter.price"></combo>
+        <combo :style="month.styleObj" @click.native="chosen('month')" :show="month.show" howLong="连续包月" :price="month.price"></combo>
       </ul>
       <div class="way">支付方式：</div>
       <form class="pay-choice clearfix" action="">
@@ -48,6 +48,7 @@
 
 <script>
 import { mapMutations } from 'vuex';
+import axios from 'axios';
 import Combo from '../common/Combo';
 export default {
   name: 'recharge',
@@ -56,9 +57,9 @@ export default {
   },
   data () {
     return {
-      year: { name: 'year', show: false, styleObj: { border: '1px solid red' }, price: 263, remaining: 365 },
-      quarter: { name: 'quarter', show: false, styleObj: { border: '1px solid red' }, price: 68, remaining: 90 },
-      month: { name: 'month', show: false, styleObj: { border: '1px solid red' }, price: 25, remaining: 30 },
+      year: { name: 'year', show: false, styleObj: { border: '1px solid red' }, price: 0, remaining: 365 },
+      quarter: { name: 'quarter', show: false, styleObj: { border: '1px solid red' }, price: 0, remaining: 90 },
+      month: { name: 'month', show: false, styleObj: { border: '1px solid red' }, price: 0, remaining: 30 },
       amount: '',
       remaining: 0,
       check: false
@@ -105,6 +106,18 @@ export default {
       }
     },
     ...mapMutations(['setVIP_mutation'])
+  },
+  created () {
+    axios.get('/mock/price.json')
+      .then((res) => {
+        const data = res.data;
+        this.year.price = data.year.price;
+        this.year.remaining = data.year.remaining;
+        this.quarter.price = data.quarter.price;
+        this.quarter.remaining = data.quarter.remaining;
+        this.month.price = data.month.price;
+        this.month.remainin = data.month.remaining;
+      });
   }
 }
 </script>

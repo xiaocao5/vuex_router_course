@@ -1,0 +1,19 @@
+{
+  "courseList": [
+    {
+      "id": "001",
+      "name": "Java课程",
+      "imgUrl": "/mock/images/java.jpg",
+      "limit": "免费课程"
+    }, {
+      "id": "002",
+      "name": "Python课程",
+      "imgUrl": "/mock/images/python.jpg",
+      "limit": "会员专享"
+    }, {
+      "id": "003",
+      "name": "JavaScript课程",
+      "imgUrl": "/mock/images/javascript.jpg",
+      "limit": "会员专享"
+    }]
+}

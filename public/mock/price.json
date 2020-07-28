@@ -1,0 +1,14 @@
+{
+  "year": {
+    "price": 268,
+    "remaining": 365
+  },
+  "quarter": {
+    "price": 68,
+    "remaining": 90
+  }, 
+  "month": {
+    "price": 25,
+    "remaining": 30
+  }
+}

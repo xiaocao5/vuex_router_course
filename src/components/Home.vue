@@ -13,7 +13,7 @@
        :key="item.id"
        @click="chooseCourse(item.id, item.limit)"
       >
-        <img width="100" height="100" src="../assets/images/java.jpg" alt="">
+        <img width="100" height="100" :src="item.imgUrl" alt="">
         <div class="content-wrapper">
           <h3 class="course-title">{{ item.name }}</h3>
           <div class="permission">{{ item.limit }}</div>
@@ -24,32 +24,16 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'home',
   data () {
     return {
-      courseList: [
-      {
-        id: '001',
-        name: 'Java课程',
-        imgUrl: '../assets/images/java.jpg',
-        limit: '免费课程'
-      }, {
-        id: '002',
-        name: 'Python课程',
-        imgUrl: '../assets/images/python.jpg',
-        limit: '会员专享'
-      }, {
-        id: '003',
-        name: 'JavaScript课程',
-        imgUrl: '../assets/images/javascript.jpg',
-        limit: '会员专享'
-      }]
+      courseList: []
     }
   },
   methods: {
     chooseCourse (id, limit) {
-      
       let userClasses = this.$store.state.classes;
       if (limit === '会员专享' && userClasses === 'free') {
         alert('此课程为会员专享课程，请充值再观看');
@@ -58,7 +42,18 @@ export default {
           path: '/course/' + id
         })
       }
+    },
+    getCourseData () {
+      axios.get('/mock/course.json')
+        .then(this.getCourseDataSucc);
+    },
+    getCourseDataSucc (res) {
+      const data = res.data;
+      this.courseList = data.courseList;
     }
+  },
+  mounted () {
+    this.getCourseData();
   }
 }
 </script>

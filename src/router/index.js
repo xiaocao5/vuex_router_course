@@ -1,12 +1,5 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Login from '../components/Login';
-import Home from '../components/Home';
-import Recharge from '../components/Recharge';
-import Course from '../components/course/Course.vue';
-import Course_001 from '../components/course/components/Course_001.vue';
-import Course_002 from '../components/course/components/Course_002.vue';
-import Course_003 from '../components/course/components/Course_003.vue';
 Vue.use(VueRouter);
 
 import store from '../store';
@@ -17,28 +10,28 @@ const router = new VueRouter({
   }, {
     path: '/login',
     name: 'login',
-    component: Login
+    component: () => import('../components/Login')
   }, {
     path: '/home',
     name: 'home',
-    component: Home
+    component: () => import('../components/Home')
   }, {
     path: '/recharge',
     name: 'recharge',
-    component: Recharge
+    component: () => import('../components/Recharge')
   }, {
     path: '/course',
     name: 'course',
-    component: Course,
+    component: () => import('../components/course/Course.vue'),
     children: [{
       path: '001',
-      component: Course_001
+      component: () => import('../components/course/components/Course_001.vue')
     }, {
       path: '002',
-      component: Course_002
+      component: () => import('../components/course/components/Course_002.vue')
     }, {
       path: '003',
-      component: Course_003
+      component: () => import('../components/course/components/Course_003.vue')
     }]
   }]
 });
