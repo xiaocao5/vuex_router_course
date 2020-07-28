@@ -22,6 +22,16 @@ export default new Vuex.Store({
       }
     }
   },
+  actions: {
+    pay_action (ctx, payload) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          ctx.commit('setVIP_mutation', payload);
+          resolve('充值成功1');
+        }, 1000);
+      })
+    }
+  },
   mutations: {
     login_mutation (state, obj) {
       state.name = obj.name;

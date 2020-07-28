@@ -89,22 +89,20 @@ export default {
     },
     pay () {
       if (this.check) {
-        setTimeout(() => {
-          alert('支付成功,您已是VIP会员');
-          let obj = {
-            classes: 'VIP',
-            remaining: this.remaining
-          }
-          this.setVIP_mutation(obj);
-          this.$router.push({
-            name: 'home'
-          });
-        }, 1000);
+        let obj = {
+          classes: 'VIP',
+          remaining: this.remaining
+        };
+        this.$store.dispatch('pay_action', obj)
+          .then((resolve) => {
+            alert(resolve);
+            this.$router.push({
+              name: 'home'
+            })
+          })
       } else {
         alert('请选择支付方式');
       }
-
-      
     },
     ...mapMutations(['setVIP_mutation'])
   }
